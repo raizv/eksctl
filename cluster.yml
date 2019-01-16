@@ -1,0 +1,31 @@
+# eksctl apply --cluster-config cluster.yml
+# or
+# eksctl create cluster --name=eks-cluster-1 \
+# --ssh-access --ssh-public-key=id_rsa.pub \ 
+# --node-volume-size=50 --node-volume-type=io1 \
+# --auto-kubeconfig \
+# --addons helm,jenkins-x
+
+apiVersion: eksctl.io/v1alpha3
+kind: ClusterConfig
+
+metadata:
+  name: cluster-1
+  region: us-west-2
+  version: "1.11"
+  tags: {team: a}
+
+availabilityZones: ["us-west-2a", "us-west-2b"]
+
+nodeGroups:
+  - name: group-1
+    instanceType: t3.large
+    tags: {environment: staging}
+    volumeSize: 20
+    # volumeType: io1
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 2
+    availabilityZones: ["us-west-2a", "us-west-2b"]
+    privateNetworking: true
+    allowSSH: false
